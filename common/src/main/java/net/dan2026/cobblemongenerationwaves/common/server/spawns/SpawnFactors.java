@@ -32,7 +32,7 @@ public class SpawnFactors implements SpawningInfluence {
      * Generations that are allowed to spawn.
      */
 
-    private static final Set<String> ALLOWED_GENERATIONS = new HashSet<>(Set.of("gen1", "gen8"));
+    private static final Set<String> ALLOWED_GENERATIONS = new HashSet<>(Set.of("gen1", "gen8", "gen3"));
 
     @Override
     public boolean affectSpawnable(@NotNull SpawnDetail detail, @NotNull SpawnablePosition spawnablePosition) {
@@ -58,9 +58,22 @@ public class SpawnFactors implements SpawningInfluence {
             return false;
         }
 
-        logSpawnDebug(species);
+        boolean spawnable = species
+                .getLabels()
+                .stream()
+                .anyMatch(
+                        label -> ALLOWED_GENERATIONS
+                                .stream()
+                                .anyMatch(
+                                        label::startsWith
+                                )
+                );
 
-        return species.getLabels().stream().anyMatch(ALLOWED_GENERATIONS::contains);
+        if (spawnable) {
+            logSpawnDebug(species);
+        }
+
+        return spawnable;
     }
 
     /**
@@ -98,7 +111,7 @@ public class SpawnFactors implements SpawningInfluence {
         }
 
         Cobblemon.LOGGER.log(Level.INFO,
-                "(Species: {}\nGeneration: {})",
+                "Species: {}, Generation: {}",
                 species.getName(),
                 generation
         );
