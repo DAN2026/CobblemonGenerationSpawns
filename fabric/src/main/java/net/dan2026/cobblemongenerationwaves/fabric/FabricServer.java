@@ -12,8 +12,10 @@
 package net.dan2026.cobblemongenerationwaves.fabric;
 
 import com.cobblemon.mod.common.api.spawning.spawner.PlayerSpawnerFactory;
+import net.dan2026.cobblemongenerationwaves.common.server.commands.ToggleGenerationsCommand;
 import net.dan2026.cobblemongenerationwaves.common.server.spawns.SpawnFactors;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.server.level.ServerPlayer;
 
 public class FabricServer implements ModInitializer {
@@ -23,17 +25,24 @@ public class FabricServer implements ModInitializer {
 
         PlayerSpawnerFactory.INSTANCE.getInfluenceBuilders().add(this::initializeSpawnFactor);
 
+        CommandRegistrationCallback.EVENT.register(
+                (dispatcher,
+                 registryAccess,
+                 environment) -> {
+                    ToggleGenerationsCommand.register(dispatcher);
+                });
     }
 
 
     /**
      * Creates a new spawn factor.
+     *
      * @param serverPlayer The player the spawner is affecting.
      * @return SpawnFactors
      * @see SpawnFactors
      */
 
-    private SpawnFactors initializeSpawnFactor(ServerPlayer serverPlayer){
+    private SpawnFactors initializeSpawnFactor(ServerPlayer serverPlayer) {
         return new SpawnFactors();
     }
 

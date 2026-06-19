@@ -13,4 +13,6 @@ package net.dan2026.cobblemongenerationwaves.common;
 
 public final class CommonServer {
 
+    public static final String MOD_ID = "cobblemongenerationwaves";
+
 }
