@@ -11,11 +11,13 @@
 
 package net.dan2026.cobblemongenerationwaves.fabric.server.spawns;
 
+import com.cobblemon.mod.common.api.pokemon.PokemonSpecies;
 import com.cobblemon.mod.common.api.spawning.detail.PokemonSpawnDetail;
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail;
 import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence;
 import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition;
-import net.minecraft.world.level.block.Fallable;
+import com.cobblemon.mod.common.pokemon.Species;
+import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 public class SpawnFactors implements SpawningInfluence {
@@ -24,10 +26,26 @@ public class SpawnFactors implements SpawningInfluence {
     @Override
     public boolean affectSpawnable(@NotNull SpawnDetail detail, @NotNull SpawnablePosition spawnablePosition) {
 
-        if (!(detail instanceof PokemonSpawnDetail)) {
-            return true;
-        }
+        /*
+        Check if the entity trying to spawn is a pokemon and not an NPC.
+         */
 
-        return false;
+        if (!(detail instanceof PokemonSpawnDetail pokemonDetail)) return true;
+
+        String speciesName = pokemonDetail.getPokemon().getSpecies();
+
+        /*
+        Returns early if the pokemon datapack is incorrectly formatted.
+         */
+
+        if (speciesName == null) return false;
+
+        Species species = PokemonSpecies.getByName(speciesName);
+
+        System.out.println("Pokemon Species: " + species);
+
+//        if(species.getName().equalsIgnoreCase("bramblin")) return false;
+
+        return true;
     }
 }
