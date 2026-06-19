@@ -11,12 +11,9 @@
 
 package net.dan2026.cobblemongenerationwaves.fabric;
 
-import com.cobblemon.common.example.ExampleCommandRegistry;
-import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence;
 import com.cobblemon.mod.common.api.spawning.spawner.PlayerSpawnerFactory;
-import net.dan2026.cobblemongenerationwaves.fabric.server.spawns.SpawnFactors;
+import net.dan2026.cobblemongenerationwaves.common.server.spawns.SpawnFactors;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.server.level.ServerPlayer;
 
 public class FabricServer implements ModInitializer {

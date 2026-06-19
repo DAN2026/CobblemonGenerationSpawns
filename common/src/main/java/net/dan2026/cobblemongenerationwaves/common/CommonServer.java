@@ -9,14 +9,8 @@
  *  If not, you can obtain a copy at [https://github.com/DAN2026/CobblemonGenerationWaves/blob/master/LICENSE].
  */
 
-package com.cobblemon.forge.example;
+package net.dan2026.cobblemongenerationwaves.common;
 
-import net.neoforged.fml.common.Mod;
-
-@Mod("cobblemon_multiplatform_mdk")
-public class ForgeModExample {
-
-    public ForgeModExample() {
-    }
+public final class CommonServer {
 
 }
