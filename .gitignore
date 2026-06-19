@@ -1,0 +1,47 @@
+# Eclipse
+bin/
+*.launch
+.settings/
+.metadata/
+.classpath
+.project
+/.architectury-transformer/
+eclipse/
+
+# IntelliJ IDEA
+out/
+*.ipr
+*.iws
+*.iml
+.idea/
+
+# Gradle
+.gradle/
+build/
+
+# VS Code
+.vscode/
+
+# Project Roots & Build Outputs
+/build/
+/.gradle/
+/common/build/
+/common/.gradle/
+/fabric/build/
+/fabric/.gradle/
+/neoforge/build/
+/neoforge/.gradle/
+/fabric/run/
+/neoforge/run/
+/common/run/
+
+# Forge MDK & Modding Artifacts
+forge*changelog.txt
+run/
+/logs/
+/showdown/
+common/src/main/resources/assets/cobblemon/showdown/
+
+# Generated Files
+*/generated/resources/*
+/fabric/src/generated/resources/cobblemon-common.accesswidener
