@@ -19,6 +19,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.server.level.ServerLevel;
 
 import java.util.Set;
 
@@ -28,7 +29,9 @@ public class ActiveGenerationsCommand {
         dispatcher.register(Commands.literal("activegeneration")
                 .executes(c -> {
 
-                    Set<String> active = SpawnFactors.getAllowedGenerations();
+                    ServerLevel level = c.getSource().getLevel();
+
+                    Set<String> active = SpawnFactors.getAllowedGenerations(level);
 
                     if (active.isEmpty()) {
                         c.getSource().sendSuccess(() -> Component.literal("There are no active generations.")

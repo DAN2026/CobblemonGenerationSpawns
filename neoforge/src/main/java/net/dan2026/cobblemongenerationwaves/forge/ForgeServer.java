@@ -12,7 +12,6 @@
 package net.dan2026.cobblemongenerationwaves.forge;
 
 import net.dan2026.cobblemongenerationwaves.common.CommonServer;
-import net.dan2026.cobblemongenerationwaves.common.server.commands.ToggleGenerationsCommand;
 import net.dan2026.cobblemongenerationwaves.common.server.registry.CommandRegistry;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;

@@ -18,59 +18,53 @@ import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail;
 import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence;
 import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition;
 import com.cobblemon.mod.common.pokemon.Species;
-import org.apache.logging.log4j.Level;
+import net.dan2026.cobblemongenerationwaves.common.server.data.GenerationData;
+import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 public class SpawnFactors implements SpawningInfluence {
 
 
     /**
-     * Generations that are allowed to spawn.
+     * Dictates whether debugging is Enabled / Disabled.
      */
 
-    private static final Set<String> ALLOWED_GENERATIONS = new HashSet<>(Set.of("gen1", "gen8", "gen3"));
+    private static final boolean DEBUG = false;
 
     @Override
     public boolean affectSpawnable(@NotNull SpawnDetail detail, @NotNull SpawnablePosition spawnablePosition) {
-
-        // Check if the entity trying to spawn is a pokemon and not an NPC.
-
         if (!(detail instanceof PokemonSpawnDetail pokemonDetail)) {
             return true;
         }
 
         String speciesName = pokemonDetail.getPokemon().getSpecies();
-
-        // Returns early if the pokemon datapack is incorrectly formatted.
-
-        if (speciesName == null) {
-            return false;
-        }
+        if (speciesName == null) return false;
 
         Species species = getSpeciesByName(speciesName);
-
         if (species == null) {
-            Cobblemon.LOGGER.log(Level.WARN, "Could not find species with name: {}", speciesName);
+            Cobblemon.LOGGER.warn("Could not find species with name: {}", speciesName);
             return false;
         }
+
+        ServerLevel serverLevel = spawnablePosition.getWorld();
+        Set<String> activeGenerations = GenerationData.get(serverLevel).getActiveGenerations();
 
         boolean spawnable = species
                 .getLabels()
                 .stream()
-                .anyMatch(
-                        label -> ALLOWED_GENERATIONS
-                                .stream()
-                                .anyMatch(
-                                        label::startsWith
-                                )
-                );
+                .anyMatch(label -> activeGenerations
+                        .stream()
+                        .anyMatch(label::startsWith));
 
-        if (spawnable) {
+        if (DEBUG) {
+            Cobblemon.LOGGER.info("Spawn check for {}: Allowed? {}", species.getName(), spawnable);
+        }
+
+        if (DEBUG & spawnable) {
             logSpawnDebug(species);
         }
 
@@ -89,7 +83,7 @@ public class SpawnFactors implements SpawningInfluence {
         try {
             return PokemonSpecies.getByName(name);
         } catch (Exception e) {
-            Cobblemon.LOGGER.log(Level.ERROR, "Error retrieving species by name: {}", name, e);
+            Cobblemon.LOGGER.error("Error retrieving species by name: {}", name, e);
             return null;
         }
     }
@@ -111,29 +105,39 @@ public class SpawnFactors implements SpawningInfluence {
             }
         }
 
-        Cobblemon.LOGGER.log(Level.INFO,
-                "Species: {}, Generation: {}",
-                species.getName(),
-                generation
-        );
+        Cobblemon.LOGGER.info("Species: {}, Generation: {}", species.getName(), generation);
     }
 
     /**
-     * Updates the allowed generations list dynamically.
+     * Adds a generation to the persistent data.
      *
-     * @param newGenerations A set of generation strings like "gen1", "gen2".
+     * @param level The server level.
+     * @param gen   The generation string to add.
      */
 
-    public static void setAllowedGenerations(@NotNull Set<String> newGenerations) {
-        ALLOWED_GENERATIONS.clear();
-        ALLOWED_GENERATIONS.addAll(newGenerations);
+    public static void addGeneration(@NotNull ServerLevel level, @NotNull String gen) {
+        GenerationData.get(level).addGeneration(gen);
     }
 
-    public static void addGeneration(String gen) { ALLOWED_GENERATIONS.add(gen); }
+    /**
+     * Removes a generation from the persistent data.
+     *
+     * @param level The server level.
+     * @param gen   The generation string to remove.
+     */
 
-    public static void removeGeneration(String gen) { ALLOWED_GENERATIONS.remove(gen); }
+    public static void removeGeneration(@NotNull ServerLevel level, @NotNull String gen) {
+        GenerationData.get(level).removeGeneration(gen);
+    }
 
-    public static Set<String> getAllowedGenerations() { return Collections.unmodifiableSet(ALLOWED_GENERATIONS); }
+    /**
+     * Gets all allowed generations from the persistent data.
+     *
+     * @param level The server level.
+     * @return An unmodifiable set of allowed generations.
+     */
 
-
+    public static Set<String> getAllowedGenerations(@NotNull ServerLevel level) {
+        return Collections.unmodifiableSet(GenerationData.get(level).getActiveGenerations());
+    }
 }

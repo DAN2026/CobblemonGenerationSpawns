@@ -5,8 +5,8 @@
  * Copyright (c) 2026 DAN2026. All rights reserved.
  *
  * This software is licensed under the CobblemonGenerationWaves License v1.0.
- *  A copy of this License should have been included with this software.
- *  If not, you can obtain a copy at [https://github.com/DAN2026/CobblemonGenerationWaves/blob/master/LICENSE].
+ * A copy of this License should have been included with this software.
+ * If not, you can obtain a copy at [https://github.com/DAN2026/CobblemonGenerationWaves/blob/master/LICENSE].
  */
 
 package net.dan2026.cobblemongenerationwaves.common.server.commands;
@@ -19,6 +19,7 @@ import net.dan2026.cobblemongenerationwaves.common.server.utility.StringUtility;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 
 public class DisableGenerationCommand {
 
@@ -34,17 +35,18 @@ public class DisableGenerationCommand {
                         .executes(c -> {
 
                             String gen = StringArgumentType.getString(c, "gen");
+                            ServerLevel level = c.getSource().getLevel();
 
                             if (!CommandSuggestions.VALID_GENERATION_SET.contains(gen)) {
                                 throw INVALID_GEN.create();
                             }
 
-                            if (!SpawnFactors.getAllowedGenerations().contains(gen)) {
+                            if (!SpawnFactors.getAllowedGenerations(level).contains(gen)) {
                                 c.getSource().sendSuccess(() -> StringUtility.createWarning(gen, "is already disabled"), false);
                                 return 0;
                             }
 
-                            SpawnFactors.removeGeneration(gen);
+                            SpawnFactors.removeGeneration(level, gen);
 
                             c.getSource().sendSuccess(() -> StringUtility.createStatusMessage(gen, false), true);
 

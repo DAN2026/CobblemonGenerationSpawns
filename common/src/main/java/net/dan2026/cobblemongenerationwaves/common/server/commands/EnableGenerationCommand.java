@@ -19,6 +19,7 @@ import net.dan2026.cobblemongenerationwaves.common.server.utility.StringUtility;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 
 public class EnableGenerationCommand {
 
@@ -33,17 +34,18 @@ public class EnableGenerationCommand {
                         .executes(c -> {
 
                             String gen = StringArgumentType.getString(c, "gen");
+                            ServerLevel level = c.getSource().getLevel();
 
                             if (!CommandSuggestions.VALID_GENERATION_SET.contains(gen)) {
                                 throw INVALID_GEN.create();
                             }
 
-                            if (SpawnFactors.getAllowedGenerations().contains(gen)) {
+                            if (SpawnFactors.getAllowedGenerations(level).contains(gen)) {
                                 c.getSource().sendSuccess(() -> StringUtility.createWarning(gen, "is already enabled"), false);
                                 return 0;
                             }
 
-                            SpawnFactors.addGeneration(gen);
+                            SpawnFactors.addGeneration(level, gen);
 
                             c.getSource().sendSuccess(() -> StringUtility.createStatusMessage(gen, true), true);
 
