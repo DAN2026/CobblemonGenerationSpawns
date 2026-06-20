@@ -1,9 +1,9 @@
-# CobblemonGenerationWaves
+# Cobblemon: Generation Waves
 ![Minecraft Version](https://img.shields.io/badge/Minecraft-1.21.1-blue)
 ![Loader](https://img.shields.io/badge/Loader-NeoForge/Fabric-orange)
 ![License](https://img.shields.io/badge/LICENSE-CobblemonGenerationWaves%20v1.0-green)
 
-CobblemonGenerationWaves is a Minecraft mod designed to manage and restrict Pokémon spawning behavior in your game world based on generation "waves." This mod is built to be cross-platform, supporting both **Fabric** and **NeoForge**.
+Cobblemon: Generation Waves is a Minecraft mod designed to manage and restrict Pokémon spawning behavior in your game world based on generation "waves." This mod is built to be cross-platform, supporting both **Fabric** and **NeoForge**.
 
 ## Features
 - **Dynamic Spawn Filtering:** Control which Pokémon generations (e.g., `gen1`, `gen8`) are allowed to spawn in your world.
@@ -23,7 +23,7 @@ CobblemonGenerationWaves is a Minecraft mod designed to manage and restrict Pok�
 
 ## Live Configuration & Spawn Calculations
 
-The mod uses an optimized runtime memory cache to intercept and validate spawn requests instantly, completely eliminating disk I/O performance overhead during wild spawns.
+The mod uses an optimised runtime memory cache to intercept and validate spawn requests instantly, completely eliminating disk I/O performance overhead during wild spawns.
 
 When an administrator alters the spawning rules:
 1. The choice is instantly written to the Overworld save's persistent data file.
