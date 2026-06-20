@@ -16,7 +16,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -31,7 +30,6 @@ public class StringUtility {
      *
      * @param gen The raw generation string to format.
      * @return A {@link MutableComponent} containing the formatted string.
-     * @see #formatList(Set, ChatFormatting)
      */
 
     public static MutableComponent formatGen(String gen) {
@@ -43,29 +41,6 @@ public class StringUtility {
 
         String prefix = parts[0].substring(0, 1).toUpperCase() + parts[0].substring(1);
         return Component.literal(prefix + " " + parts[1]);
-    }
-
-    /**
-     * Formats a set of generation strings into a comma-separated list of components.
-     *
-     * @param gens The set of raw generation strings.
-     * @param color The {@link ChatFormatting} color to apply to each generation name.
-     * @return A single {@link MutableComponent} containing the joined list.
-     * @see #formatGen(String)
-     */
-
-    public static MutableComponent formatList(Set<String> gens, ChatFormatting color) {
-
-        MutableComponent result = Component.literal("");
-        Iterator<String> it = gens.iterator();
-
-        while (it.hasNext()) {
-            result.append(formatGen(it.next()).withStyle(color));
-            if (it.hasNext()) {
-                result.append(Component.literal(", ").withStyle(ChatFormatting.GRAY));
-            }
-        }
-        return result;
     }
 
     /**

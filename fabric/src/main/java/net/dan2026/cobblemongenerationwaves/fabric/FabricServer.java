@@ -11,39 +11,26 @@
 
 package net.dan2026.cobblemongenerationwaves.fabric;
 
-import com.cobblemon.mod.common.api.spawning.spawner.PlayerSpawnerFactory;
 import net.dan2026.cobblemongenerationwaves.common.server.registry.CommandRegistry;
-import net.dan2026.cobblemongenerationwaves.common.server.spawns.SpawnFactors;
+import net.dan2026.cobblemongenerationwaves.common.server.registry.ServerRegistry;
+import net.dan2026.cobblemongenerationwaves.common.server.registry.SpawningRegistry;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
-import net.minecraft.server.level.ServerPlayer;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 
 public class FabricServer implements ModInitializer {
 
     @Override
     public void onInitialize() {
 
-        PlayerSpawnerFactory.INSTANCE.getInfluenceBuilders().add(this::initializeSpawnFactor);
+        ServerLifecycleEvents.SERVER_STARTED.register(SpawningRegistry::register);
 
         CommandRegistrationCallback.EVENT.register(
                 (dispatcher,
                  registryAccess,
-                 environment) -> {
-                    CommandRegistry.register(dispatcher);
-                });
-    }
+                 environment) -> CommandRegistry.register(dispatcher));
 
-
-    /**
-     * Creates a new spawn factor.
-     *
-     * @param serverPlayer The player the spawner is affecting.
-     * @return SpawnFactors
-     * @see SpawnFactors
-     */
-
-    private SpawnFactors initializeSpawnFactor(ServerPlayer serverPlayer) {
-        return new SpawnFactors();
+        ServerLifecycleEvents.SERVER_STARTED.register(ServerRegistry::register);
     }
 
 

@@ -9,10 +9,15 @@
  *  If not, you can obtain a copy at [https://github.com/DAN2026/CobblemonGenerationWaves/blob/master/LICENSE].
  */
 
-package net.dan2026.cobblemongenerationwaves.common;
+package net.dan2026.cobblemongenerationwaves.common.server.registry;
 
-public final class CommonServer {
+import net.dan2026.cobblemongenerationwaves.common.server.events.ServerEvents;
+import net.minecraft.server.MinecraftServer;
 
-    public static final String MOD_ID = "cobblemongenerationwaves";
+public class ServerRegistry {
+
+    public static void register(MinecraftServer server){
+        ServerEvents.onServerStarted(server);
+    }
 
 }

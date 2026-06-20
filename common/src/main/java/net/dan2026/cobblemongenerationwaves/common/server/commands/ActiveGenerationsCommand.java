@@ -18,20 +18,21 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.server.level.ServerLevel;
 
 import java.util.Set;
 
 public class ActiveGenerationsCommand {
 
+    /**
+     * Registers the active generation command to display currently active generations.
+     *
+     * @param dispatcher the command dispatcher
+     */
+
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("activegeneration")
                 .executes(c -> {
-
-                    ServerLevel level = c.getSource().getLevel();
-
-                    Set<String> active = SpawnFactors.getAllowedGenerations(level);
+                    Set<String> active = SpawnFactors.getCachedGenerations();
 
                     if (active.isEmpty()) {
                         c.getSource().sendSuccess(() -> Component.literal("There are no active generations.")
@@ -39,17 +40,8 @@ public class ActiveGenerationsCommand {
                         return 0;
                     }
 
-                    MutableComponent message =
-                            Component
-                            .literal("Active Generations: ")
-                            .withStyle(ChatFormatting.WHITE);
-
-                    message.append(StringUtility.formatList(active, ChatFormatting.GREEN));
-
                     c.getSource().sendSuccess(() -> StringUtility.formatActiveGenerations(active), false);
-
                     return 1;
-
                 }));
     }
 }
