@@ -14,12 +14,14 @@ package net.dan2026.cobblemongenerationwaves.common.server.spawns;
 import com.cobblemon.mod.common.Cobblemon;
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies;
 import com.cobblemon.mod.common.api.spawning.detail.PokemonSpawnDetail;
+import com.cobblemon.mod.common.api.spawning.detail.SpawnAction;
 import com.cobblemon.mod.common.api.spawning.detail.SpawnDetail;
 import com.cobblemon.mod.common.api.spawning.influence.SpawningInfluence;
 import com.cobblemon.mod.common.api.spawning.position.SpawnablePosition;
 import com.cobblemon.mod.common.pokemon.Species;
 import net.dan2026.cobblemongenerationwaves.common.server.data.GenerationData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,12 +46,6 @@ public class SpawnFactors implements SpawningInfluence {
     private static final int TOTAL_GENS = 9;
     private static float currentWeightMultiplier = 1.0f;
 
-    /*
-    AffectWeight needs overriding to increase weights.
-    Math involved for proper scaling dependent on total generations active.
-    finalWeight = ((totalGenerations - cachedGenerations) * weights)
-     */
-
     /**
      * Evaluates whether a Pokémon is allowed to spawn based on its generation labels.
      *
@@ -61,34 +57,48 @@ public class SpawnFactors implements SpawningInfluence {
     @Override
     public boolean affectSpawnable(@NotNull SpawnDetail detail, @NotNull SpawnablePosition spawnablePosition) {
 
-        if (!(detail instanceof PokemonSpawnDetail)) {
-            return true;
+        if (detail instanceof PokemonSpawnDetail pokemonDetail) {
+
+//            String name = pokemonDetail.getPokemon().getSpecies();
+//            assert name != null;
+//            Species species = PokemonSpecies.getByName(name);
+//
+//            boolean spawnable = matchesActiveGeneration(pokemonDetail);
+//
+//
+//            if (species != null) {
+//                Set<String> labels = species.getLabels();
+//                Cobblemon.LOGGER.info("DEBUG: Species: {} | Spawnable: {} | Raw Labels: {}", name, spawnable, labels);
+//            } else {
+//                Cobblemon.LOGGER.error("DEBUG: Species object is null for name: {}", name);
+//            }
+
+            return matchesActiveGeneration(pokemonDetail);
         }
 
-        return matchesActiveGeneration(detail);
+        return true;
+    }
+
+    @Override
+    public void affectSpawn(@NotNull SpawnAction<?> action, @NotNull Entity entity) {
+        SpawningInfluence.super.affectSpawn(action, entity);
     }
 
     @Override
     public float affectWeight(@NotNull SpawnDetail detail, @NotNull SpawnablePosition spawnablePosition, float weight) {
 
-        if (!(detail instanceof PokemonSpawnDetail pokemonDetail)) {
+        if (!(detail instanceof PokemonSpawnDetail)) {
             return weight;
         }
 
         if (matchesActiveGeneration(detail)) {
 
-            float finalWeight = weight * currentWeightMultiplier;
 
-            String speciesName = pokemonDetail.getPokemon().getSpecies();
-
-            Cobblemon.LOGGER.info("Active Gen Spawn: {} | Multiplier: {} | Final Weight: {}", speciesName, currentWeightMultiplier, finalWeight);
-
-            return finalWeight;
+            return weight * currentWeightMultiplier;
         }
 
         return 0.0f;
     }
-
 
     /**
      * Determines if a spawn detail matches any of the currently enabled generations.
@@ -178,7 +188,8 @@ public class SpawnFactors implements SpawningInfluence {
         cachedGenerations.addAll(persistentGens);
 
         int activeCount = cachedGenerations.size();
-        currentWeightMultiplier = (float) (TOTAL_GENS - activeCount);
+
+        currentWeightMultiplier = (activeCount == 9) ? 1 : (TOTAL_GENS - activeCount);
 
         Cobblemon.LOGGER.info("Generation Cache updated. Active: {}, Multiplier: {}", activeCount, currentWeightMultiplier);
     }
@@ -192,13 +203,5 @@ public class SpawnFactors implements SpawningInfluence {
     public static Set<String> getCachedGenerations() {
         return Collections.unmodifiableSet(cachedGenerations);
     }
-
-    private @NotNull String getGenerationFromLabels(@NotNull Species species) {
-        return species.getLabels().stream()
-                .filter(label -> cachedGenerations.stream().anyMatch(label::startsWith))
-                .findFirst()
-                .orElse("unknown");
-    }
-
 
 }
