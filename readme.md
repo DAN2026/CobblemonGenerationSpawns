@@ -14,13 +14,13 @@ This mod is built to be multi-platform, supporting both **Fabric** and **NeoForg
 
 ## Commands & Usage
 
-| Command               | Arguments | Permission | Description | Example Usage |
-|:----------------------| :--- | :--- | :--- | :--- |
-| `/generation enable`  | `<generation>` | OP Level 2 | Permanently enables spawning for the specified generation string. | `/enablegeneration gen1` |
-| `/generation disable` | `<generation>` | OP Level 2 | Disables spawning for the specified generation string. | `/disablegeneration gen1` |
-| `/generation active`  | *None* | **All Players** | Lists all currently active Pokémon generations allowed to spawn. | `/activegenerations` |
-| `/generation debug`   | *None* | OP Level 2 | Displays current in-memory cache states and persistent disk storage contents. | `/generationwave debug` |
-| `/generation help`    | *None* | OP Level 2 | Prints a quick-reference summary of syntax and instructions for administering generation waves. | `/generationwave help` |
+| Command               | Arguments | Permission | Description | Example Usage              |
+|:----------------------| :--- | :--- | :--- |:---------------------------|
+| `/generation enable`  | `<generation>` | OP Level 2 | Permanently enables spawning for the specified generation string. | `/generation enable gen1`  |
+| `/generation disable` | `<generation>` | OP Level 2 | Disables spawning for the specified generation string. | `/generation disable gen1` |
+| `/generation active`  | *None* | **All Players** | Lists all currently active Pokémon generations allowed to spawn. | `/generation active`       |
+| `/generation debug`   | *None* | OP Level 2 | Displays current in-memory cache states and persistent disk storage contents. | `/generation debug`        |
+| `/generation help`    | *None* | OP Level 2 | Prints a quick-reference summary of syntax and instructions for administering generation waves. | `/generation help`         |
 
 ## Live Configuration & Spawn Calculations
 
