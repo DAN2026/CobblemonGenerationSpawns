@@ -13,6 +13,7 @@ package net.dan2026.cobblemongenerationspawns.forge;
 
 import net.dan2026.cobblemongenerationspawns.common.CommonServer;
 import net.dan2026.cobblemongenerationspawns.common.server.registry.CommandRegistry;
+import net.dan2026.cobblemongenerationspawns.common.server.registry.EventRegistry;
 import net.dan2026.cobblemongenerationspawns.common.server.registry.ServerRegistry;
 import net.dan2026.cobblemongenerationspawns.common.server.registry.SpawningRegistry;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -26,6 +27,7 @@ public class ForgeServer {
 
     public ForgeServer() {
         NeoForge.EVENT_BUS.register(this);
+        EventRegistry.register();
     }
 
     @SubscribeEvent

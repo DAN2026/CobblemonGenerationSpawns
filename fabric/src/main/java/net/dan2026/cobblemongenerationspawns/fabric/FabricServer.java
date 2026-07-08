@@ -12,6 +12,7 @@
 package net.dan2026.cobblemongenerationspawns.fabric;
 
 import net.dan2026.cobblemongenerationspawns.common.server.registry.CommandRegistry;
+import net.dan2026.cobblemongenerationspawns.common.server.registry.EventRegistry;
 import net.dan2026.cobblemongenerationspawns.common.server.registry.ServerRegistry;
 import net.dan2026.cobblemongenerationspawns.common.server.registry.SpawningRegistry;
 import net.fabricmc.api.ModInitializer;
@@ -22,6 +23,8 @@ public class FabricServer implements ModInitializer {
 
     @Override
     public void onInitialize() {
+
+        EventRegistry.register();
 
         ServerLifecycleEvents.SERVER_STARTED.register(SpawningRegistry::register);
 
