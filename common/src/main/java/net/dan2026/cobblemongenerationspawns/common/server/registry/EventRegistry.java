@@ -11,7 +11,6 @@
 
 package net.dan2026.cobblemongenerationspawns.common.server.registry;
 
-import com.cobblemon.mod.common.Cobblemon;
 import com.cobblemon.mod.common.api.Priority;
 import com.cobblemon.mod.common.api.events.CobblemonEvents;
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies;
